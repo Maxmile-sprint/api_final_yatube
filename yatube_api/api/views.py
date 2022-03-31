@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
 
-from posts.models import Comment, Follow, Group, Post
+from posts.models import Comment, Group, Post
 from .permissions import AuthorOrReadOnly
 from .serializers import (CommentSerializer, FollowSerializer,
                           GroupSerializer, PostSerializer)
@@ -45,7 +45,7 @@ class FollowAPIView(generics.ListCreateAPIView):
     search_fields = ('following__username',)
 
     def get_queryset(self):
-        queryset = Follow.objects.filter(user=self.request.user)
+        queryset = self.request.user.follower.all()
         return queryset
 
     def perform_create(self, serializer):
